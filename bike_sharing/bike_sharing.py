@@ -1,3 +1,6 @@
+#Lucas Borges Fernandes
+#2015
+
 import pandas
 import numpy
 from sklearn.tree import DecisionTreeClassifier
@@ -11,24 +14,31 @@ def main():
     test_set = pandas.read_csv(path + "test.csv")
     
     #Preparing training data
+    #These are the features that will be used to train the classifier
+    #After adding new features, we will have to manually add their name to this
+    #list
     features = ['season','holiday','workingday','weather','temp','atemp','humidity','windspeed']
-    #Matrix of features
-    x_train = train_set[features]
-    #Array with labels
-    y_train = train_set['count']
+    #Getting the desired features from the training set
+    features_train = train_set[features]
+    #Getting the labels of the data contained in the training set
+    labels_train = train_set['count']
     
     #Feeding classifier with training data
     model = DecisionTreeClassifier()
-    model.fit(x_train, y_train)
+    model.fit(features_train, labels_train)
     
-    #
-    #test_features = numpy.array(test_set[features])
-    test_features = test_set[features]
-    #
-    predicted = model.predict(test_features)
+    #Now we will feed the classifier with the test data, so that we can
+    #classify it
+    #Getting desired features from the testing set
+    features_test = test_set[features]
+    #Predicting it
+    predicted = model.predict(features_test)
     
-    #Creating new DataFrame
+    #Creating new DataFrame that will be used to write the results on a .csv
+    #file
+    #One column named 'count' that has the predicted list as its rows
     data = {'count' : predicted}
+    #DataFrame will have the datetimes as the index of the predicted values
     data_frame = pandas.DataFrame(data = data, index = test_set['datetime'])
 
     #Writing to .csv file
