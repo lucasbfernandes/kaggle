@@ -42,6 +42,6 @@ def main():
     data_frame = pandas.DataFrame(data = data, index = test_set['datetime'])
 
     #Writing to .csv file
-    data_frame.to_csv("bike_sharing.csv")
+    data_frame.to_csv("bike_sharing_simplest.csv")
 
 main()
