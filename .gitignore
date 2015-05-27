@@ -1,3 +1,6 @@
 #Ignoring following files
 
 bike_sharing/*.py~
+
+*.*~
+
