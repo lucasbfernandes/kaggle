@@ -1,6 +1,6 @@
 #Ignoring following files
 
+#Everything that ends with ~
 bike_sharing/*.py~
-
 .gitignore~
 

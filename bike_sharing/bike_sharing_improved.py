@@ -4,6 +4,24 @@
 import pandas
 import numpy
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from datetime import datetime
+
+#Get year of formatted string
+def get_year(date_string):
+    return datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S").date().year 
+
+#Get month of formatted string
+def get_month(date_string):
+    return datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S").date().month
+
+#Get hour of formatted string
+def get_hour(date_string):
+    return datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S").time().hour
+
+#Get day of the week -- Sunday = 0, Monday = 1, ... Saturday = 6
+def get_day(date_string):
+    return datetime.strptime(date_string, "%Y-%m-%d %H:%M:%S").strftime("%w")
 
 def main():
     #Directory in which the .csv files are located
@@ -13,11 +31,19 @@ def main():
     #Reading testing data
     test_set = pandas.read_csv(path + "test.csv")
     
+    #Feature Engineering
+    #Adding new features
+    functions = [get_year, get_month, get_hour, get_day]
+    columns = ['year', 'month', 'hour', 'day']
+    for col, func in zip(columns, functions):
+        train_set[col] = train_set['datetime'].map(func)
+        test_set[col] = test_set['datetime'].map(func)
+
     #Preparing training data
     #These are the features that will be used to train the classifier
     #After adding new features, we will have to manually add their name to this
     #list
-    features = ['season','holiday','workingday','weather','temp','atemp','humidity','windspeed']
+    features = ['season','holiday','workingday','weather','temp','atemp','humidity','windspeed', 'year', 'month', 'hour', 'day']
     #Getting the desired features from the training set
     features_train = train_set[features]
     #Getting the labels of the data contained in the training set
@@ -26,7 +52,8 @@ def main():
     #Feeding classifier with training data
     #Can be changed to other classifiers, such as LogisticRegression,
     #KNearestNeighbors etc.
-    model = DecisionTreeClassifier()
+    #model = DecisionTreeClassifier()
+    model = RandomForestClassifier(n_estimators = 10)
     model.fit(features_train, labels_train)
     
     #Now we will feed the classifier with the test data, so that we can
@@ -45,5 +72,5 @@ def main():
 
     #Writing to .csv file
     data_frame.to_csv("results/bike_sharing_improved.csv")
-
+ 
 main()
