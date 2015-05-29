@@ -62,7 +62,7 @@ def main():
     features_test = test_set[features]
     #Predicting it
     predicted = model.predict(features_test)
-    
+    print(predicted)
     #Creating new DataFrame that will be used to write the results on a .csv
     #file
     #One column named 'count' that has the predicted list as its rows
